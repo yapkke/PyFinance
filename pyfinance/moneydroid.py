@@ -1,6 +1,7 @@
 """This module deals with MoneyDroid's SQLite database
 """
 import sqlite3
+import datetime
 import pyfinance.pyf as pyf
 
 class MoneyDroid(pyf.account):
@@ -67,10 +68,10 @@ class MoneyDroid(pyf.account):
             c.execute('SELECT time,note,amount,category_id FROM Items WHERE account_id==? ORDER BY time',
                       (id_select,))
         for row in c:
-            self.transactions.append(pyf.transaction(row[0],
+            self.transactions.append(pyf.transaction(datetime.date.fromtimestamp(row[0]/1000),
                                                      float(row[2])/100,
                                                      row[1],
-                                                     row[3]))        
+                                                     self.categories[row[3]]))
         
         c.close()
 

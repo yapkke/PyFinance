@@ -20,6 +20,32 @@ class transaction:
         ##Type (usu. available for financial institution's record)
         self.type = type
 
+    def __str__(self):
+        """Return string representation
+        """
+        return self.date.strftime("%d/%m/%y")+"\t"+\
+               "$"+str(self.amount)+"\t\t"+\
+               self.description+\
+               "("+str(self.type).strip()+")"
+
+    def __ge__(self, other):
+        return (self.date >= other.date)
+
+    def __le__(self, other):
+        return (self.date <= other.date)
+
+    def __gt__(self, other):
+        return (self.date > other.date)
+
+    def __lt__(self, other):
+        return (self.date < other.date)
+
+    def __eq__(self, other):
+        return (self.date == other.date)
+
+    def __ne__(self, other):
+        return (self.date != other.date)
+
 class account:
     """Base account class
     
