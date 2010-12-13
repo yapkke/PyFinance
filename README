@@ -1,1 +1,22 @@
-Recent financial websites allows one to download statements in easily readable format, e.g., csv.  This means one can easily cross-check accounts for consistency.  I personally use MoneyDroid which allows transactions to be explored in sqlite database.  This set of scripts is created for my own needs.  If you find it useful, go ahead.  However this comes as-in without guarantees.  I am not responsible for your finance.  Good luck.
+Recent financial websites allows one to download statements in easily
+readable format, e.g., csv.  This means one can easily cross-check
+accounts for consistency.  I personally use MoneyDroid which allows
+transactions to be explored in sqlite database.  This set of scripts
+is created for my own needs.  If you find this useful, go ahead.
+
+Copyright 2010 K.-K. Yap (ykk)
+
+Licensed under the Apache License, Version 2.0 (the "License"); you
+may not use this file except in compliance with the License. You may
+obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+implied. See the License for the specific language governing
+permissions and limitations under the License.
+
+
+
