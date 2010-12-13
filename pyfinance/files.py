@@ -1,6 +1,7 @@
 """Utilites to handle different data files.
 """
 import pyfinance.moneydroid as moneydroid
+import pyfinance.csv as csv
 
 class dataParser:
     """Data parser for understand what file to load, e.g.,
@@ -43,5 +44,12 @@ class dataParser:
                     return moneydroid.MoneyDroid(tuple[2])
             else:
                 print "Unknown SQLite type :"+tuple[1]
+        if (tuple[0] == "CSV"):
+            if (tuple[1] == "CitiCard"):
+                return csv.CitiCard(tuple[2])
+            elif (tuple[1] == "Chase"):
+                return csv.Chase(tuple[2])
+            else:
+                print "Unknown CSV type :"+tuple[1]
         else:
             print "Unknown file format :"+tuple[0]

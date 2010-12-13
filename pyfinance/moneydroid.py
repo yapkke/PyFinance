@@ -68,7 +68,7 @@ class MoneyDroid(pyf.account):
                       (id_select,))
         for row in c:
             self.transactions.append(pyf.transaction(row[0],
-                                                     row[2]/100,
+                                                     float(row[2])/100,
                                                      row[1],
                                                      row[3]))        
         
