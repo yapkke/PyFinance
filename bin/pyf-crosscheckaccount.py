@@ -49,7 +49,13 @@ tocheck = parser.getData(args[1])
 print str(len(ok))+" out of "+str(len(tocheck.transactions))+" entries has a single match"
 if (verbose):
     for o in ok:
-        print "\t"+str(o[0])
+        print "\tmatch between\t"+str(o[0])+"\n\t\t\t"+str(o[1])+"\n"
+    print
+
+print "Left in Check-Against Account"
+for t in leftover:
+    print "\t"+str(t)
+print
 print
 for (p, pdesc) in problems.items():
     print p
@@ -59,3 +65,4 @@ for (p, pdesc) in problems.items():
         for cm in pdesc[1]:
             print "\t\t"+str(cm)
     print
+
