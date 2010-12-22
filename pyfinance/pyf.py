@@ -65,7 +65,7 @@ class transaction:
         return (self.amount == other.amount) and \
             (self.date == other.date) and \
             (self.description == other.description) and \
-            (self.type == other.type)
+            (self.type == other.type)    
 
 class account:
     """Base account class
@@ -148,3 +148,15 @@ class account:
                 
         return (ok, problematic, masteracct.transactions)
         
+class accounts(account):
+    """Base accounts class
+
+    @author ykk
+    @date Dec 2010
+    """
+    def __init__(self):
+        """Initialize
+        """
+        account.__init__(self, None)
+        ##Dict of accounts
+        self.accounts = {}

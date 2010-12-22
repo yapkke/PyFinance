@@ -4,7 +4,7 @@ import sqlite3
 import datetime
 import pyfinance.pyf as pyf
 
-class MoneyDroid(pyf.account):
+class MoneyDroid(pyf.accounts):
     """Class to represent MoneyDroid data.
     
     @author ykk
@@ -13,13 +13,11 @@ class MoneyDroid(pyf.account):
     def __init__(self, filename, account=None):
         """Initialize
         """
-        pyf.account.__init__(self)
+        pyf.accounts.__init__(self)
  
         conn = sqlite3.connect(filename)
         ##Account to use
         self.account = account
-        ##Dict of accounts
-        self.accounts = {}
         self.__get_accounts(conn)
         ##Dict of categories
         self.categories = {}

@@ -4,6 +4,7 @@ import sys
 import getopt
 import simplejson
 import pyfinance.files as pyfiles
+import pyfinance.pyf as pyf
 
 def usage():
     """Display usage
@@ -37,5 +38,10 @@ if not (len(args) == 1):
     sys.exit(2)
 
 parser = pyfiles.dataParser()
-print simplejson.dumps(parser.getData(args[0]).accounts,
-                       sort_keys=True, indent=4)
+acct = parser.getData(args[0])
+if (isinstance(acct, pyf.accounts)):
+    print simplejson.dumps(acct.accounts,
+                           sort_keys=True, indent=4)
+else:
+    print str(acct)+" is not of type accounts"
+

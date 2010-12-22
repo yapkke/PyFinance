@@ -11,6 +11,7 @@ class dataParser:
     SQLite:MoneyDroid:<filename>:<account name> for MoneyDroid's Account
     CSV:Chase:<filename> for Chase's CSV file
     CSV:CitiCard:<filename> for CitiCard's CSV file
+    QFX:CitiCard:<filename> for CitiCard's Quicken file
 
     @author ykk
     @date Dec 2010
