@@ -2,6 +2,7 @@
 """
 import pyfinance.moneydroid as moneydroid
 import pyfinance.csv as csv
+import pyfinance.quicken as quicken
 
 class dataParser:
     """Data parser for understand what file to load, e.g.,
@@ -44,12 +45,17 @@ class dataParser:
                     return moneydroid.MoneyDroid(tuple[2])
             else:
                 print "Unknown SQLite type :"+tuple[1]
-        if (tuple[0] == "CSV"):
+        elif (tuple[0] == "CSV"):
             if (tuple[1] == "CitiCard"):
                 return csv.CitiCard(tuple[2])
             elif (tuple[1] == "Chase"):
                 return csv.Chase(tuple[2])
             else:
                 print "Unknown CSV type :"+tuple[1]
+        elif (tuple[0] == "QFX"):
+            if (tuple[1] == "CitiCard"):
+                return quicken.CitiCardQFX(tuple[2])
+            else:
+                print "Unknown QFX type :"+tuple[1]
         else:
             print "Unknown file format :"+tuple[0]
