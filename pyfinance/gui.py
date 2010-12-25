@@ -13,6 +13,7 @@ class SQLiteAcctChooser(QtGui.QWidget):
     def __init__(self, parent=None):
         super(SQLiteAcctChooser,self).__init__(parent)
         QtGui.QWidget.__init__(self)
+        self.parent = parent
 
         label = QtGui.QLabel("SQLite Account")
         self.combo = QtGui.QComboBox()
@@ -21,6 +22,11 @@ class SQLiteAcctChooser(QtGui.QWidget):
         grid.addWidget(label)
         grid.addWidget(self.combo)
         self.setLayout(grid)
+
+        self.connect(self.combo, 
+                     QtCore.SIGNAL("currentIndexChanged(const QString&)"),
+                     self.parent.load)
+
 
 class SQLiteChooser(QtGui.QWidget):
     """SQLite file chooser
@@ -66,17 +72,12 @@ class AcctChooser(QtGui.QWidget):
     def __init__(self, parent=None):
         super(AcctChooser,self).__init__(parent)
         QtGui.QWidget.__init__(self)
-        
-        self.combo = QtGui.QComboBox()
-        self.combo.addItem("---Choose Account Type---")
-        self.combo.addItem("QFX:CitiCard")
-        self.combo.addItem("CSV:Chase")
-        self.combo.addItem("CSV:CitiCard")
+        self.parent = parent
+
         self.filename = QtGui.QLineEdit()
         button = QtGui.QPushButton("Choose", self) 
         
         grid = QtGui.QHBoxLayout()
-        grid.addWidget(self.combo)
         grid.addWidget(self.filename)
         grid.addWidget(button)
         self.setLayout(grid)
@@ -84,23 +85,146 @@ class AcctChooser(QtGui.QWidget):
         self.connect(button, QtCore.SIGNAL("clicked()"), self.choose)
 
     def choose(self):
-        """Choose SQLite file
+        """Choose account file
         """
         self.filename.setText(\
             QtGui.QFileDialog.getOpenFileName(self, 'Open file',
                                               os.getcwd()))
-        self.load()
+        self.parent.load()
+
+class LeftPanel(QtGui.QWidget):
+    """Left panel
+    """
+    def __init__(self, parent=None):
+        """Initialize
+        """
+        super(LeftPanel,self).__init__(parent)
+        QtGui.QWidget.__init__(self)
+
+        self.sqliteacct = SQLiteAcctChooser(self)
+        self.sqlitechooser = SQLiteChooser(self.sqliteacct, self)
+        self.masterlist=QtGui.QListWidget(self)
+
+        grid = QtGui.QVBoxLayout()
+        grid.addWidget(self.sqlitechooser)
+        grid.addWidget(self.sqliteacct)
+        grid.addWidget(self.masterlist)
+        self.setLayout(grid)
+
+    def account(self):
+        """Get account name
+        """
+        sText = str(self.sqliteacct.combo.itemText(\
+                self.sqliteacct.combo.currentIndex()))
+        acctname = "SQLite:MoneyDroid:"+\
+            str(self.sqlitechooser.filename.text())
+        if (sText != "All"):
+            acctname += ":"+sText
+        return acctname
 
     def load(self):
+        """Load account
+        """
         parser = pyfiles.dataParser()
-        #acct = parser.getData("SQLite:MoneyDroid:"+\
-        #                          str(self.filename.text()))
-        #if (isinstance(acct, pyf.accounts)):
-        #    self.acct.combo.clear()
-        #    self.acct.combo.addItem("All")
-        #    for (a,i) in acct.accounts.items():
-        #        self.acct.combo.addItem(a)
+        acct = parser.getData(self.account())
+        self.masterlist.clear()
+        for t in acct.transactions:
+            self.masterlist.addItem(str(t))
+        self.masterlist.sortItems()
 
+class RightPanel(QtGui.QWidget):
+    """Right panel
+    """
+    def __init__(self, parent=None):
+        """Initialize
+        """
+        super(RightPanel,self).__init__(parent)
+        QtGui.QWidget.__init__(self)
+
+        self.combo = QtGui.QComboBox()
+        self.combo.addItem("---Choose Account Type---")
+        self.combo.addItem("QFX:CitiCard")
+        self.combo.addItem("CSV:Chase")
+        self.combo.addItem("CSV:CitiCard")
+        self.acctchooser = AcctChooser(self)
+        self.accountlist=QtGui.QListWidget(self)
+
+        grid = QtGui.QVBoxLayout()
+        grid.addWidget(self.combo)
+        grid.addWidget(self.acctchooser)
+        grid.addWidget(self.accountlist)
+        self.setLayout(grid)
+
+    def account(self):
+        """Get account name
+        """
+        return str(self.combo.itemText(\
+                self.combo.currentIndex()))+":"+\
+                str(self.acctchooser.filename.text())
+    
+    def load(self):
+        """Load account
+        """
+        parser = pyfiles.dataParser()
+        acct = parser.getData(self.account())
+        self.accountlist.clear()
+        for t in acct.transactions:
+            self.accountlist.addItem(str(t))
+        self.accountlist.sortItems()
+
+class MainPanel(QtGui.QWidget):
+    """Main panel
+    """
+    def __init__(self, parent=None):
+        """Initialize
+        """
+        super(MainPanel,self).__init__(parent)
+        QtGui.QWidget.__init__(self)
+
+        self.left = LeftPanel(self)
+        self.right = RightPanel(self)
+
+        grid = QtGui.QHBoxLayout()
+        grid.addWidget(self.left)
+        grid.addWidget(self.right)
+        self.setLayout(grid)
+
+    def get_left_account(self):
+        """Get account on left
+        """
+        return self.left.account()
+
+    def get_right_account(self):
+        """Get account on right
+        """
+        return self.right.account()
+
+class BottomPanel(QtGui.QWidget):
+    """Main panel
+    """
+    def __init__(self, parent=None):
+        """Initialize
+        """
+        super(BottomPanel,self).__init__(parent)
+        QtGui.QWidget.__init__(self)
+        self.parent = parent
+
+        quitbutton = QtGui.QPushButton("Quit", self) 
+        checkbutton = QtGui.QPushButton("Cross-check", self) 
+        matchbutton = QtGui.QPushButton("Match and Check-off", self) 
+        
+        grid = QtGui.QHBoxLayout()
+        grid.addWidget(checkbutton)
+        grid.addWidget(matchbutton)
+        grid.addWidget(quitbutton)
+        self.setLayout(grid)
+
+        self.connect(quitbutton, QtCore.SIGNAL("clicked()"), QtGui.qApp,
+                     QtCore.SLOT('quit()'))
+        self.connect(checkbutton, QtCore.SIGNAL("clicked()"), 
+                     self.parent.crosscheck)
+        self.connect(matchbutton, QtCore.SIGNAL("clicked()"), 
+                     self.parent.match)
 
 
 class MainWindow(QtGui.QDialog):
@@ -111,25 +235,47 @@ class MainWindow(QtGui.QDialog):
         """
         super(MainWindow,self).__init__(parent)
         QtGui.QMainWindow.__init__(self)
-        self.resize(500,600)
+        self.resize(1000,600)
         self.setWindowTitle("PyFinance")
 
-        sqliteacct = SQLiteAcctChooser(self)
-        sqlitechooser = SQLiteChooser(sqliteacct, self)
-        acctchooser = AcctChooser(self)
-        list=QtGui.QListView(self)
-        quitbutton = QtGui.QPushButton("Quit", self) 
+        self.mainpanel = MainPanel(self)
+        bottompanel = BottomPanel(self)
         
         grid = QtGui.QVBoxLayout()
-        grid.addWidget(sqlitechooser)
-        grid.addWidget(sqliteacct)
-        grid.addWidget(acctchooser)
-        grid.addWidget(list)
-        grid.addWidget(quitbutton)
+        grid.addWidget(self.mainpanel)
+        grid.addWidget(bottompanel)
         self.setLayout(grid)
 
-        self.connect(quitbutton, QtCore.SIGNAL("clicked()"), QtGui.qApp,
-                     QtCore.SLOT('quit()'))
+    def crosscheck(self):
+        """Cross check accounts
+        """
+        print "Checking"
+        parser = pyfiles.dataParser()
+        checkagainst = parser.getData(self.mainpanel.get_left_account())
+        tocheck = parser.getData(self.mainpanel.get_right_account())
+        
+        (ok, problems, leftover) = tocheck.crosscheck(checkagainst)
+
+        self.mainpanel.left.masterlist.clear()
+        for t in leftover:
+            self.mainpanel.left.masterlist.addItem(str(t))
+        self.mainpanel.left.masterlist.sortItems()
+
+        self.mainpanel.right.accountlist.clear()
+        for (p, pdesc) in problems.items():
+            self.mainpanel.right.accountlist.addItem(str(p))
+        self.mainpanel.right.accountlist.sortItems()
+    
+    def match(self):
+        """Declare entries as matched
+        """
+        left = self.mainpanel.left.masterlist
+        right = self.mainpanel.right.accountlist
+        if ((len(left.selectedItems()) == 1) and
+            (len(right.selectedItems()) == 1)):
+            print "Remove"
+            left.takeItem(left.currentRow())
+            right.takeItem(right.currentRow()) 
 
 class GUI(QtGui.QApplication):
     """Main Qt Application
