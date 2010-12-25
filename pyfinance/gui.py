@@ -249,7 +249,6 @@ class MainWindow(QtGui.QDialog):
     def crosscheck(self):
         """Cross check accounts
         """
-        print "Checking"
         parser = pyfiles.dataParser()
         checkagainst = parser.getData(self.mainpanel.get_left_account())
         tocheck = parser.getData(self.mainpanel.get_right_account())
@@ -273,7 +272,6 @@ class MainWindow(QtGui.QDialog):
         right = self.mainpanel.right.accountlist
         if ((len(left.selectedItems()) == 1) and
             (len(right.selectedItems()) == 1)):
-            print "Remove"
             left.takeItem(left.currentRow())
             right.takeItem(right.currentRow()) 
 
