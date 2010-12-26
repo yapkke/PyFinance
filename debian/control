@@ -1,0 +1,15 @@
+Source: pyfinance
+Section: utils
+Priority: optional
+Maintainer: KK Yap <yapkokkiong@gmail.com>
+XS-Python-Version: >=2.5
+Standards-Version: 3.8.4
+
+Package: pyfinance
+Architecture: all
+Homepage: http://http://yapkke.github.com/PyFinance/
+Depends: python(>=2.5), python-simplejson, python-qt4, python-sqlite2
+Description: A set of Python scripts for cross-checking finance accounts.
+  This is created for creating accounts (Quicken, CSV, etc.) with MoneyDroid's
+  SQLite database.  This allows you to make sure you are not paying more than
+  you should.
