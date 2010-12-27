@@ -6,11 +6,11 @@ setup(
     name = "PyFinance",
     version = "0.1",
     packages = find_packages(),
+    
     scripts = ['bin/pyf-gui.py',
                'bin/pyf-crosscheckaccount.py',
                'bin/pyf-listaccounts.py',
-               'bin/pyf-listtransactions.py'],
-    
+               'bin/pyf-listtransactions.py'],    
     provides = ["pyfinance"],
     requires = ['simplejson','sqlite3','PyQt4'],
 
