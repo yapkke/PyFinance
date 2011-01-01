@@ -168,10 +168,11 @@ class RightPanel(QtGui.QWidget):
         """
         parser = pyfiles.dataParser()
         acct = parser.getData(self.account())
-        self.accountlist.clear()
-        for t in acct.transactions:
-            self.accountlist.addItem(str(t))
-        self.accountlist.sortItems()
+        if (acct != None):
+            self.accountlist.clear()
+            for t in acct.transactions:
+                self.accountlist.addItem(str(t))
+            self.accountlist.sortItems()
 
 class MainPanel(QtGui.QWidget):
     """Main panel
