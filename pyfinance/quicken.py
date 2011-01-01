@@ -15,7 +15,8 @@ class tag_transaction:
         """Initialize
         """
         self.__content = {}
-        for x in stmttrn.split("<"):
+        for x in stmttrn.replace('\r','').\
+                replace('\n','').split("<"):
             y = x.split(">")
             if (len(x) == 0):
                 pass
@@ -69,6 +70,31 @@ class CitiCardQFX(qfx):
 
     @author ykk
     @date Dec 2010
+    """
+    def __init__(self, filename):
+        """Initialize
+        """
+        qfx.__init__(self,filename)
+
+        for x in self._content:
+            self.transactions.append(pyf.transaction(\
+                    self.__getdate(x.get("DTPOSTED")),
+                    float(x.get("TRNAMT")),
+                    x.get("NAME"),
+                    x.get("TRNTYPE")))
+
+    def __getdate(self, string):
+        """Parse date
+        """
+        return datetime.date(int(string[0:4]),
+                             int(string[4:6]),
+                             int(string[6:8]))
+                             
+class ChaseQFX(qfx):
+    """QFX from Chase
+
+    @author ykk
+    @date Jan 2010
     """
     def __init__(self, filename):
         """Initialize

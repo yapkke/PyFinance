@@ -144,8 +144,9 @@ class RightPanel(QtGui.QWidget):
         self.combo = QtGui.QComboBox()
         self.combo.addItem("---Choose Account Type---")
         self.combo.addItem("QFX:CitiCard")
-        self.combo.addItem("CSV:Chase")
+        self.combo.addItem("QFX:Chase")
         self.combo.addItem("CSV:CitiCard")
+        self.combo.addItem("CSV:Chase")
         self.acctchooser = AcctChooser(self)
         self.accountlist=QtGui.QListWidget(self)
 

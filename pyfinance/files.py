@@ -56,6 +56,8 @@ class dataParser:
         elif (tuple[0] == "QFX"):
             if (tuple[1] == "CitiCard"):
                 return quicken.CitiCardQFX(tuple[2])
+            elif (tuple[1] == "Chase"):
+                return quicken.ChaseQFX(tuple[2])
             else:
                 print "Unknown QFX type :"+tuple[1]
         else:
